@@ -1,7 +1,9 @@
 class ApplicationController < ActionController::Base
-  before_action :current_user
+  helper_method :current_user
 
   def current_user
-    puts "------------------ code before every request ------------------"
+    if session["user_id"] != nil
+      User.find_by({ "id" => session["user_id"] })
+    end
   end
 end

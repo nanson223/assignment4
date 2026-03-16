@@ -5,14 +5,30 @@ class PlacesController < ApplicationController
   end
 
   def show
+    if current_user == nil
+      redirect_to "/login"
+      return
+    end
+
     @place = Place.find_by({ "id" => params["id"] })
-    @entries = Entry.where({ "place_id" => @place["id"] })
+    @entries = Entry.where({
+      "place_id" => @place["id"],
+      "user_id" => current_user["id"]
+    })
   end
 
   def new
+    if current_user == nil
+      redirect_to "/login"
+    end
   end
 
   def create
+    if current_user == nil
+      redirect_to "/login"
+      return
+    end
+
     @place = Place.new
     @place["name"] = params["name"]
     @place.save
